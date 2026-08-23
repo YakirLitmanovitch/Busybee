@@ -21,15 +21,19 @@ public class UsersPrePopulate implements ApplicationRunner {
     @Autowired private UsersStorage m_users;
     @Autowired private PasswordEncoder m_encoder;
 
-    @Override
-    public void run(ApplicationArguments args) {
-        List<UserAccount> users = List.of(
-            new UserAccount("admin",   m_encoder.encode("Admin@123!"),   UserAccount.Role.ADMIN),
-            new UserAccount("alice",   m_encoder.encode("Alice@456!"),   UserAccount.Role.CREATOR),
-            new UserAccount("bob",     m_encoder.encode("Bob@789!"),     UserAccount.Role.CREATOR),
-            new UserAccount("charlie", m_encoder.encode("Charlie#1!"),   UserAccount.Role.TRIAL)
-        );
-        users.forEach(m_users::add);
-        LOGGER.info("event=users_prepopulated count={}", users.size());
-    }
+	@Override
+	public void run(ApplicationArguments args) {
+		createUser("admin",   UserAccount.Role.ADMIN);
+		createUser("alice",   UserAccount.Role.CREATOR);
+		createUser("bob",     UserAccount.Role.CREATOR);
+		createUser("charlie", UserAccount.Role.TRIAL);
+		LOGGER.info("event=users_prepopulated count=4");
+	}
+
+	private void createUser(String username, UserAccount.Role role) {
+		String plainPwd = java.util.UUID.randomUUID().toString().substring(0, 12);
+		String encoded  = m_encoder.encode(plainPwd);
+		m_users.add(new UserAccount(username, encoded, role));
+		LOGGER.info("event=user_created username={} tempPassword={}", username, plainPwd);
+	}
 }
