@@ -23,16 +23,16 @@ public class RegistrationController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
         try {
-            String username = req.username().getValue();
+            String username = req.username().toString();
             if (m_users.exists(username)) {
                 throw new IllegalArgumentException("Username already taken");
             }
-            String hash = m_encoder.encode(req.password().getValue());
+            String hash = m_encoder.encode(req.password().toString());
             m_users.add(new UserAccount(username, hash, UserAccount.Role.TRIAL));
             LOGGER.info("event=user_registered username={}", username);
             return ResponseEntity.ok("{\"success\":true}");
         } catch (Exception ex) {
-            LOGGER.warn("event=registration_failed username={} reason={}", req.username().getValue(), ex.getMessage());
+            LOGGER.warn("event=registration_failed username={} reason={}", req.username().toString(), ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"" + ex.getMessage() + "\"}");
         }
     }

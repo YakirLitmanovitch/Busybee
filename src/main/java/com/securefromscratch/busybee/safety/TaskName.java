@@ -10,9 +10,12 @@ public class TaskName extends BoundedWord {
     public static final int MIN_LENGTH = 1;
     public static final int MAX_LENGTH = 50;
 
+    private final String value;
+
     @JsonCreator
     public TaskName(String value) throws TypeValidationException {
         super(value);
+        this.value = value;
     }
 
     @Override
@@ -20,4 +23,7 @@ public class TaskName extends BoundedWord {
 
     @Override
     public Integer max() { return MAX_LENGTH; }
+
+    @Override
+    public String toString() { return value; }
 }

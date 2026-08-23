@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8080";
+const baseUrl = "";
 
 // Helper function to retrieve a cookie by name
 function getCookie(name) {

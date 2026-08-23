@@ -306,29 +306,20 @@ function toggleReplyForm(commentElement, taskId, commentId) {
 
 async function submitComment(taskId, textBox, fileInput, parentCommentId = null) {
     const formData = new FormData();
-
-    // Create the JSON object for comment fields
-    const commentFields = {
-        text: textBox.value,
-        taskid: taskId,       // Lowercase "taskid"
-        commentid: parentCommentId // Lowercase "commentid"
-    };
-
-    // Add the JSON part with explicit Content-Type
-    const blob = new Blob([JSON.stringify(commentFields)], { type: 'application/json' });
-    formData.append("commentFields", blob);
-
+    formData.append("taskid", taskId);
+    formData.append("text", textBox.value);
+    if (parentCommentId) {
+        formData.append("replyTo", parentCommentId);
+    }
     if (fileInput.files[0]) {
         formData.append("file", fileInput.files[0]);
     }
-
     try {
         const response = await sendPost("/comment", formData);
-
         if (response.ok) {
-            textBox.value = ""; // Clear text box
-            fileInput.value = ""; // Clear file input
-            fetchTasks(); // Refresh tasks to show the new comment
+            textBox.value = "";
+            fileInput.value = "";
+            fetchTasks();
         } else {
             throw new Error(`Error: ${response.status}`);
         }

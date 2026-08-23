@@ -24,7 +24,9 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
-
+springBoot {
+    mainClass = "com.securefromscratch.busybee.Application"
+}
 repositories {
 	mavenCentral()
 }

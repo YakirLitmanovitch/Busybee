@@ -6,29 +6,26 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.owasp.safetypes.exception.TypeValidationException;
 
-/**
- * XSS-safe description field.
- * Uses Jsoup with Safelist.none() to strip ALL HTML tags, preventing XSS.
- * Unlike regex-based approaches, Jsoup correctly handles nested/obfuscated HTML.
- */
-@Schema(type = "String", description = "Task description – HTML is stripped automatically (max 500 characters)")
+@Schema(type = "String", description = "Task description – only safe HTML is kept (max 500 characters)")
 public class SafeDescription {
     public static final int MAX_LENGTH = 500;
+
+    private static final Safelist ALLOWED = Safelist.basicWithImages()
+            .addTags("u")
+            .preserveRelativeLinks(false);
 
     private final String value;
 
     @JsonCreator
     public SafeDescription(String raw) throws TypeValidationException {
-        if (raw == null) {
-            throw new TypeValidationException();
-        }
-        // Strip ALL HTML – Jsoup Safelist.none() allows no tags at all
-        String cleaned = Jsoup.clean(raw, Safelist.none());
-        if (cleaned.length() > MAX_LENGTH) {
-            throw new TypeValidationException();
-        }
+        if (raw == null) throw new TypeValidationException();
+        String cleaned = Jsoup.clean(raw, ALLOWED);
+        if (cleaned.length() > MAX_LENGTH) throw new TypeValidationException();
         this.value = cleaned;
     }
 
     public String getValue() { return value; }
+
+    @Override
+    public String toString() { return value; }
 }

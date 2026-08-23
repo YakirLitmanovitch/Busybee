@@ -71,7 +71,7 @@ public class TasksController {
     public ResponseEntity<String> create(@Valid @RequestBody CreateTaskRequest request,
                                          Authentication authentication) throws IOException {
         String username = authentication.getName();
-        String name = request.name().getValue();
+        String name = request.name().toString();
 
         // Reject duplicate task name (case-insensitive)
         boolean duplicate = m_tasks.getAll().stream()
