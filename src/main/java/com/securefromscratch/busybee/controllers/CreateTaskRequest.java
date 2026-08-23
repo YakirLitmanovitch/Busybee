@@ -3,6 +3,7 @@ package com.securefromscratch.busybee.controllers;
 import com.securefromscratch.busybee.safety.SafeDescription;
 import com.securefromscratch.busybee.safety.TaskName;
 import jakarta.validation.constraints.AssertTrue;
+import com.securefromscratch.busybee.safety.Username;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public record CreateTaskRequest(
         SafeDescription desc,
         LocalDate dueDate,
         LocalTime dueTime,
-        String[] responsibilityOf
+        Username[] responsibilityOf
 ) {
     /**
      * Cross-field validation: if dueDate (and optionally dueTime) is provided,
