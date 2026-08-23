@@ -23,7 +23,7 @@ public record CreateTaskRequest(
         SafeDescription desc,
         LocalDate dueDate,
         LocalTime dueTime,
-        Username[] responsibilityOf
+        String[] responsibilityOf
 ) {
     /**
      * Cross-field validation: if dueDate (and optionally dueTime) is provided,
