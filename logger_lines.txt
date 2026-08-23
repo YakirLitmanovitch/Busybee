@@ -1,0 +1,44 @@
+BusyBee – כל שורות ה-LOGGER בפרויקט
+=====================================
+
+auth/UsersPrePopulate.java
+--------------------------
+LOGGER.info("event=user_created username={} tempPassword={}", username, plainPwd);
+LOGGER.info("event=users_prepopulated count=4");
+
+auth/UsernamePasswordDetailsService.java
+----------------------------------------
+LOGGER.warn("event=login_failed reason=user_not_found");
+LOGGER.info("event=login_success username={}", userDetails.getUsername());
+
+auth/TaskAuthorization.java
+---------------------------
+LOGGER.warn("event=authorization_denied action=close_task taskid={} user={}", taskid, user);
+LOGGER.warn("event=authorization_denied action=create_task user={} reason=trial_has_open_task", user);
+LOGGER.warn("event=authorization_denied action=view_image img={} user={}", imgName.getName(), user);
+
+controllers/TasksController.java
+---------------------------------
+LOGGER.info("event=task_created id={} owner={} name={}", id, username, name);
+LOGGER.info("event=task_done id={} by={}", taskid, authentication.getName());
+LOGGER.warn("event=task_duplicate_name name={}", name);
+
+controllers/CommentsUploadController.java
+------------------------------------------
+LOGGER.info("event=comment_added taskid={} by={} hasFile={}", fields.taskid(), auth.getName(), file != null && !file.isEmpty());
+LOGGER.warn("event=comment_upload_rejected taskid={} reason={}", fields.taskid(), ex.getMessage());
+
+controllers/ImageController.java
+---------------------------------
+LOGGER.info("event=image_requested img={} by={}", img.getName(), auth.getName());
+LOGGER.warn("event=image_ext_rejected img={} ext={}", img.getName(), ext);
+LOGGER.warn("event=image_not_found img={}", img.getName());
+
+controllers/GlobalExceptionsHandler.java
+-----------------------------------------
+LOGGER.warn("event=resource_missing code=TASK_NOT_FOUND endpoint={}", req.getRequestURI());
+LOGGER.warn("event=validation_error endpoint={} message={}", req.getRequestURI(), message);
+LOGGER.warn("event=validation_error endpoint={} message={}", req.getRequestURI(), ex.getMessage());
+LOGGER.warn("event=upload_error endpoint={} message={}", req.getRequestURI(), ex.getMessage());
+LOGGER.warn("event=access_denied user={} endpoint={}", user, req.getRequestURI());
+LOGGER.error("event=unexpected_error endpoint={}", req.getRequestURI(), ex);
